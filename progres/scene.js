@@ -36,6 +36,37 @@ window.addEventListener('resize', () =>
 
 })
 
+// KeyboardEvents
+document.addEventListener("keydown", onDocumentKeyDown, false);
+
+function onDocumentKeyDown(event){
+    let keyCode = event.which;
+    if (keyCode == 87){
+        scene.add(cube);
+        cube.position.z -= 50;
+    }
+    if (keyCode == 83){
+      scene.add(cube);
+      cube.position.z += 50;
+    }
+    if (keyCode == 65){
+      scene.add(cube);
+      cube.position.x -= 50;
+    }
+    if (keyCode == 68){
+      scene.add(cube);
+      cube.position.x += 50;
+    }
+
+    // if (keyCode == 8){
+    //   scene.remove(cube);
+    // }
+    requestAnimationFrame();
+};
+
+
+
+
 // Camera
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000);
