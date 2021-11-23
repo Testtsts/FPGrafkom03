@@ -1,8 +1,11 @@
 import * as THREE from './js/three.module.js';
 import {OrbitControls} from './js/OrbitControls.js';
 import {GLTFLoader} from './js/GLTFLoader.js';
+import {OBJLoader} from './js/OBJLoader.js';
+import {MTLLoader} from './js/MTLLoader.js';
 import {Reflector} from './js/objects/Reflector.js';
-import * as dat from './js/libs/dat.gui.module.js'
+import * as dat from './js/libs/dat.gui.module.js';
+import {path, box2048} from './kotak.js';
 
 //canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -35,20 +38,24 @@ window.addEventListener('resize', () =>
 
 // Camera
 
-const camera = new THREE.PerspectiveCamera(100, sizes.width / sizes.height, 0.1, 1000);
-camera.position.x = 0;
-camera.position.y = 10;
-camera.position.z = 90;
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000);
+// camera.position.y = 50;
+// camera.position.z = 200;
 scene.add(camera);
 
 //controls
 const controls = new OrbitControls(camera, canvas);
-controls.target.set(4.5, 0, 4.5);
- 
+camera.position.set( 0, 50, 200 );
+// controls.target.set(10, 10, 10);
+controls.smoothZoom = true;
+// controls.minDistance = 50;
+controls.maxDistance = 200;
 controls.enablePan = true;
 controls.maxPolarAngle = Math.PI / 2;
+controls.update();
+// controls.enableDamping = true;
 
-controls.enableDamping = true;
+
 
 //Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -60,98 +67,136 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.shadowMap.enabled = true;
+renderer.shadowMapSoft = true;
 renderer.render(scene, camera, controls);
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.gammaOutput = true;
 
-// panorama
-const panorama = new THREE.CubeTextureLoader();
-const textureBG= panorama.load([
-  './texture/px.jpg', './texture/nx.jpg',
-  './texture/py.jpg', './texture/ny.jpg',
-  './texture/pz.jpg', './texture/nz.jpg'
-]);
-scene.background = textureBG ;
+const color_black = new THREE.Color("rgb(42,42,42)");
+scene.background = color_black ;
 
-//object plane
-const loader4 = new THREE.TextureLoader();
-const basee = loader4.load('./texture/ny.jpg');
-// basee.wrapS = THREE.RepeatWrapping;
-// basee.wrapT = THREE.RepeatWrapping;
-// const repeats = 100;
-// basee.repeat.set(repeats, repeats);
+let geo = new THREE.BoxBufferGeometry(0, 0, 0)
+let mat = new THREE.MeshLambertMaterial({
+    // color: "white"
+})
+let mesh = new THREE.Mesh(geo, mat)
+scene.add(mesh)
 
-let sandPlane = new THREE.BoxGeometry(500, 500);
-let sandMaterial = new THREE.MeshLambertMaterial({
-    map: basee,
-    // color: 2434341
+let tex = new THREE.TextureLoader().load("./assets/grass.jpg")
+tex.anisotropy = 100
+tex.repeat.set(100, 100)
+tex.wrapT = THREE.RepeatWrapping
+tex.wrapS = THREE.RepeatWrapping
+geo = new THREE.PlaneBufferGeometry(10000, 10000)
+mat = new THREE.MeshLambertMaterial({
+  map: tex
+})
+mesh = new THREE.Mesh(geo, mat)
+mesh.position.set(0, -5, 0)
+mesh.rotation.set(Math.PI / -2, 0, 0)
+scene.add(mesh)
+
+let axis = new THREE.Vector3(0, 1, 0)
+function updateCamera() {
+  camera.position.applyAxisAngle(axis, 0.01)
+}
+
+var cubes = [];
+const geometry = new THREE.BoxGeometry(10,10,10);
+// for (let i = 0; i < 3; i++) {
+//   cubes[i] = new THREE.Mesh(geometry, material);
+//   cubes[i].position.x = Math.random() * 1000 - 500;
+//   cubes[i].position.y = Math.random() * 1000 - 500;
+//   cubes[i].position.z = Math.random() * 500 - 500;
+//   scene.add(cubes[i]);
+// }
+let n = 2048;
+box2048(n);
+const loader = new THREE.TextureLoader();
+const material = new THREE.MeshPhongMaterial( {
+  map: loader.load(path),
+  shininess: 30
 });
-
-
-let plane = new THREE.Mesh(sandPlane,sandMaterial);
-plane.rotation.x = Math.PI / 2;
-plane.position.y = -5;
-plane.receiveShadow = true;
-scene.add(plane);
-
-//object gltf
-//Gambar Bebek 1
-// const loader = new GLTFLoader()
-// loader.load('./assets/Duck.gltf', function(gltf){
-//        gltf.scene.scale.set(10, 10, 10);
-//         const root = gltf.scene;
-//         root.position.x = 0;
-//         root.position.y = -3.4;
-//         root.position.z = 10;
-//         scene.add(root);
-    
-//         root.traverse(n => { if ( n.isMesh ) {
-//           n.castShadow = true; 
-//           n.receiveShadow = true;
-//         }});
-
-// })
-const cube1 = loader4.load('./assets/base.png');
-
-const geometry = new THREE.BoxGeometry( 20, 20, 20 );
-const material = new THREE.MeshLambertMaterial( {
-  color: 'black'} );
 const cube = new THREE.Mesh( geometry, material );
+cube.castShadow = true;
+cube.receiveShadow = true;
 scene.add( cube );
-cube.position.set(-10, 8, -2);
+cube.position.set(-10, 0, -2);
 
-const geometry2 = new THREE.BoxGeometry( 20, 20, 20 );
-const material2 = new THREE.MeshLambertMaterial( {
-  color: 'red'} );
-const cube2 = new THREE.Mesh( geometry2, material2 );
-scene.add( cube2 );
-cube2.position.set(10, 8, -2);
+//sapi
+const mtlLoader = new MTLLoader();
+    mtlLoader.load('./assets/animal//OBJ/Cow.mtl', (mtl) => {
+      mtl.preload();
+      const objLoader = new OBJLoader();
+      mtlLoader.setMaterialOptions( { side: THREE.DoubleSide } );
+      objLoader.setMaterials(mtl);
+      objLoader.load('./assets/animal//OBJ/Cow.obj', (root) => {
+        root.scale.set(5,5,5);
+        // root.position.x = 100
+        // root.position.y = -5
+        root.position.z = -100
+        scene.add(root);
+      });
+    });
 
+
+//kyda
+const mtlLoader2 = new MTLLoader();
+    mtlLoader2.load('./assets/animal//OBJ/Horse.mtl', (mtl) => {
+      mtl.preload();
+      const objLoader2 = new OBJLoader();
+      mtlLoader2.setMaterialOptions( { side: THREE.DoubleSide } );
+      objLoader2.setMaterials(mtl);
+      objLoader2.load('./assets/animal//OBJ/Horse.obj', (root) => {
+        root.scale.set(5,5,5);
+        root.position.x = 100
+        root.position.y = -5
+        root.position.z = -50
+        scene.add(root);
+      });
+    });
 
 
 //Light
 
-const solarLight = new THREE.DirectionalLight();
-solarLight.position.set(10, 100, -100);
+const solarLight = new THREE.DirectionalLight(0xffffff,1);
+solarLight.position.set(-10, 100, 100);
+// solarLight.target.position.set(0, 0,0);
 solarLight.castShadow = true;
-solarLight.intensity = 2;
-solarLight.shadow.mapSize.width = 1024;
-solarLight.shadow.mapSize.height = 1024;
-solarLight.shadow.camera.near = 250;
-solarLight.shadow.camera.far = 1000;
+// solarLight.intensity = 1;
+solarLight.shadow.camera.visible = true;
+// solarLight.shadow.mapSize.width = 1024;
+// solarLight.shadow.mapSize.height = 1024;
+// solarLight.shadow.camera.near = 250;
+// solarLight.shadow.camera.far = 1000;
 
-let intensity = 20;
+// let intensity = 1;
 
-solarLight.shadow.camera.left = -intensity;
-solarLight.shadow.camera.right = intensity;
-solarLight.shadow.camera.top = intensity;
-solarLight.shadow.camera.bottom  = -intensity;
+// solarLight.shadow.camera.left = -intensity;
+// solarLight.shadow.camera.right = intensity;
+// solarLight.shadow.camera.top = intensity;
+// solarLight.shadow.camera.bottom  = -intensity;
 scene.add(solarLight);
+// scene.add(solarLight.target);
+// const helper = new THREE.DirectionalLightHelper( solarLight, 5 );
+// scene.add(helper);
 
+// const solarLight2 = new THREE.DirectionalLight(0xffffff,1);
+// solarLight2.position.set(0, 50, -50);
+// // solarLight2.castShadow = true;
+// // solarLight2.shadow.mapSize.width = 1024;
+// // solarLight2.shadow.mapSize.height = 1024;
+// // solarLight2.shadow.camera.near = 250;
+// // solarLight2.shadow.camera.far = 1000;
+// scene.add(solarLight2);
+// const helper2 = new THREE.DirectionalLightHelper( solarLight2, 5 );
+// scene.add(helper2);
 
 const animate = () =>
 {
     controls.update();
+    // cubes[0].rotation.x += 0.01;
+    // cubes[0].rotation.y += 0.01;
 
     //render
     // sphereCamera.update(renderer, scene);
