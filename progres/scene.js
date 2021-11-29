@@ -16,44 +16,39 @@ const scene = new THREE.Scene();
 //random generate 
 function getrand(){
 
-  return (Math.floor(Math.random()*3)-2)*50;
+  return (Math.floor(Math.random()*3)-1)*50;
 }
 
 //cube container
 var cubes = [];
 
 //move cubes
-// function movecubeup(number){
-//   for (let i = 0; i < cubes.length(); i++) {
-//     console.log(i);
-//     cubes[i].position.z += number;
-//   }
-//   return;
-// }
 
-// function movecubedown(number){
-//   for (let i = 0; i < cubes.length(); i++) {
-//     console.log(i);
-//     cubes[i].position.z -= number;
-//   }
-//   return;
-// }
+function movecuberight(box){
+  
+  box.position.x += 50;
+}
 
-// function movecubeleft(number){
-//   for (let i = 0; i < cubes.length(); i++) {
-//     console.log(i);
-//     cubes[i].position.x -= number;
-//   }
-//   return;
-// }
+function movecubeleft(box){
+  box.position.x -= 50;
+}
 
-// function movecuberight(number){
-//   for (let i = 0; i < cubes.length(); i++) {
-//     console.log(i);
-//     cubes[i].position.x += number;
-//   }
-//   return;
-// }
+function movecubeback(box){
+  box.position.z -= 50;
+}
+
+function movecubefront(box){
+  box.position.z += 50;
+}
+
+function movecubeup(box){
+  box.position.y += 50;
+}
+
+function movecubedown(box){
+  box.position.y -= 50;
+}
+
 
 
 //size
@@ -93,34 +88,40 @@ function onDocumentKeyDown(event){
     }
 
     if (keyCode == 87){
+      cubes.forEach(movecubeback);
       cube.position.z -= 50;
-        // movecubedown(50);
     }
     if (keyCode == 83){
-
-      cube.position.z += 50;
-      // movecubeup(50);
+      cubes.forEach(movecubefront);
     }
     if (keyCode == 65){
-      cube.position.x -= 50;
-      // movecubeleft(50);
+      cubes.forEach(movecubeleft);
     }
     if (keyCode == 68){
-      cube.position.x += 50;
-      // movecuberight(50);
+      cubes.forEach(movecuberight);
+    }
+    if (keyCode == 32){
+      cubes.forEach(movecubeup);
+    }
+    if (keyCode == 17){
+      cubes.forEach(movecubedown);
     }
 
     var ccube = new THREE.Mesh(geometry,material);
     ccube.castShadow = true;
     ccube.receiveShadow = true;
 
-    ccube.position.set(getrand(),0,getrand());
-    scene.add (ccube);
+    ccube.position.set(getrand(),getrand()+50,getrand());
     
+    
+    // cubes.add(ccube);
+    scene.add(ccube);
     cubes.push(ccube);
+    console.log(cubes[1].position.z);
 
     
-    requestAnimationFrame();
+    // requestAnimationFrame();
+
 };
 
 
@@ -203,9 +204,8 @@ const material = new THREE.MeshPhongMaterial( {
 var cube = new THREE.Mesh( geometry, material );
 cube.castShadow = true;
 cube.receiveShadow = true;
-scene.add( cube );
-cube.position.set(-10, 0, -2);
-
+scene.add(cube);
+cube.position.set(0, 0, 0);
 cubes.push(cube);
 
 //sapi
