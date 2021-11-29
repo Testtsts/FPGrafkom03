@@ -25,27 +25,32 @@ var cubes = [];
 //move cubes
 
 function movecuberight(box){
-  
+  if(box.position.x < 50)
   box.position.x += 50;
 }
 
 function movecubeleft(box){
+  if(box.position.x > -50)
   box.position.x -= 50;
 }
 
 function movecubeback(box){
+  if(box.position.z > -50)
   box.position.z -= 50;
 }
 
 function movecubefront(box){
+  if(box.position.z < 50)
   box.position.z += 50;
 }
 
 function movecubeup(box){
+  if(box.position.y < 150)
   box.position.y += 50;
 }
 
 function movecubedown(box){
+  if(box.position.y > 0)
   box.position.y -= 50;
 }
 
@@ -89,7 +94,7 @@ function onDocumentKeyDown(event){
 
     if (keyCode == 87){
       cubes.forEach(movecubeback);
-      cube.position.z -= 50;
+      // cube.position.z -= 50;
     }
     if (keyCode == 83){
       cubes.forEach(movecubefront);
@@ -100,10 +105,10 @@ function onDocumentKeyDown(event){
     if (keyCode == 68){
       cubes.forEach(movecuberight);
     }
-    if (keyCode == 32){
+    if (keyCode == 69){
       cubes.forEach(movecubeup);
     }
-    if (keyCode == 17){
+    if (keyCode == 81){
       cubes.forEach(movecubedown);
     }
 
@@ -117,7 +122,6 @@ function onDocumentKeyDown(event){
     // cubes.add(ccube);
     scene.add(ccube);
     cubes.push(ccube);
-    console.log(cubes[1].position.z);
 
     
     // requestAnimationFrame();
@@ -201,12 +205,12 @@ const material = new THREE.MeshPhongMaterial( {
   map: loader.load(path),
   shininess: 30
 });
-var cube = new THREE.Mesh( geometry, material );
-cube.castShadow = true;
-cube.receiveShadow = true;
-scene.add(cube);
-cube.position.set(0, 0, 0);
-cubes.push(cube);
+// var cube = new THREE.Mesh( geometry, material );
+// cube.castShadow = true;
+// cube.receiveShadow = true;
+// scene.add(cube);
+// cube.position.set(0, 0, 0);
+// cubes.push(cube);
 
 //sapi
 const mtlLoader = new MTLLoader();
