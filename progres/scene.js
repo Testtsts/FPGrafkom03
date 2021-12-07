@@ -31,6 +31,9 @@ class cubetiles {
 
 //cube container
 const gamegrid = [];
+const movetwo = [];
+const moveone = [];
+const movenull = [];
 const cubes = [];
 
 //move cubes
@@ -140,17 +143,17 @@ function onDocumentKeyDown(event){
     framecounter = 0;
     
     // var ccube = new THREE.Mesh(geometry,material);
-    var ccube = new cubetiles(geometry,material,0);
-    ccube.cube.castShadow = true;
-    ccube.cube.receiveShadow = true;
+    // var ccube = new cubetiles(geometry,material,0);
+    // ccube.cube.castShadow = true;
+    // ccube.cube.receiveShadow = true;
 
-    ccube.cube.position.set(getrand(),getrand()+50,getrand());
+    // ccube.cube.position.set(getrand(),getrand()+50,getrand());
     
     
     // cubes.add(ccube);
-    scene.add(ccube.cube);
-    cubes.push(ccube);
-    console.log(cubes.length);
+    // scene.add(ccube.cube);
+    // cubes.push(ccube);
+    // console.log(cubes.length);
 };
 
 // Camera
@@ -327,6 +330,19 @@ const animate = () =>
     // sphereCamera.update(renderer, scene);
     if(framecounter<5){
       gameupdate();
+      if(framecounter == 4){
+        var ccube = new cubetiles(geometry,material,0);
+        ccube.cube.castShadow = true;
+        ccube.cube.receiveShadow = true;
+    
+        ccube.cube.position.set(getrand(),getrand()+50,getrand());
+        
+        
+        // cubes.add(ccube);
+        scene.add(ccube.cube);
+        cubes.push(ccube);
+        console.log(cubes.length);
+      }
     }
     // gameupdate();
     renderer.render(scene, camera);
