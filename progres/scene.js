@@ -19,40 +19,51 @@ function getrand(){
   return (Math.floor(Math.random()*3)-1)*50;
 }
 
+class cubetiles {
+  cube;
+  value;
+  tomove;
+  constructor(geometry, material, value){
+    this.cube = new THREE.Mesh(geometry,material);
+    this.value = value;
+  }
+}
+
 //cube container
-var cubes = [];
+const gamegrid = [];
+const cubes = [];
 
 //move cubes
 
-function movecuberight(box){
-  if(box.position.x < 50)
-  box.position.x += 50;
-}
+// function movecuberight(box){
+//   if(box.position.x < 50)
+//   box.position.x += 50;
+// }
 
-function movecubeleft(box){
-  if(box.position.x > -50)
-  box.position.x -= 50;
-}
+// function movecubeleft(box){
+//   if(box.position.x > -50)
+//   box.position.x -= 50;
+// }
 
-function movecubeback(box){
-  if(box.position.z > -50)
-  box.position.z -= 50;
-}
+// function movecubeback(box){
+//   if(box.position.z > -50)
+//   box.position.z -= 50;
+// }
 
-function movecubefront(box){
-  if(box.position.z < 50)
-  box.position.z += 50;
-}
+// function movecubefront(box){
+//   if(box.position.z < 50)
+//   box.position.z += 50;
+// }
 
-function movecubeup(box){
-  if(box.position.y < 100)
-  box.position.y += 50;
-}
+// function movecubeup(box){
+//   if(box.position.y < 100)
+//   box.position.y += 50;
+// }
 
-function movecubedown(box){
-  if(box.position.y > 0)
-  box.position.y -= 50;
-}
+// function movecubedown(box){
+//   if(box.position.y > 0)
+//   box.position.y -= 50;
+// }
 
 //move vector
 const mov = new THREE.Vector3();
@@ -100,7 +111,9 @@ function onDocumentKeyDown(event){
       cubes.forEach(removecube);
       return;
     }
-
+    if(framecounter <= 10){
+      return;
+    }
     if (keyCode == 87){
       // cubes.forEach(movecubeback);
       mov.set(0,0,-10);
@@ -108,46 +121,37 @@ function onDocumentKeyDown(event){
     if (keyCode == 83){
       // cubes.forEach(movecubefront);
       mov.set(0,0,10);
-
     }
     if (keyCode == 65){
       // cubes.forEach(movecubeleft);
       mov.set(-10,0,0);
-
     }
     if (keyCode == 68){
       // cubes.forEach(movecuberight);
       mov.set(10,0,0);
-
     }
     if (keyCode == 69){
       // cubes.forEach(movecubeup);
       mov.set(0,10,0);
-
     }
     if (keyCode == 81){
-      // cubes.forEach(movecubedown);
       mov.set(0,-10,0);
-
     }
+    framecounter = 0;
+    
+    // var ccube = new THREE.Mesh(geometry,material);
+    var ccube = new cubetiles(geometry,material,0);
+    ccube.cube.castShadow = true;
+    ccube.cube.receiveShadow = true;
 
-    var ccube = new THREE.Mesh(geometry,material);
-    ccube.castShadow = true;
-    ccube.receiveShadow = true;
-
-    ccube.position.set(getrand(),getrand()+50,getrand());
+    ccube.cube.position.set(getrand(),getrand()+50,getrand());
     
     
     // cubes.add(ccube);
-    scene.add(ccube);
+    scene.add(ccube.cube);
     cubes.push(ccube);
     console.log(cubes.length);
-    
-
 };
-
-
-
 
 // Camera
 
@@ -230,40 +234,6 @@ const material = new THREE.MeshPhongMaterial( {
 // cube.position.set(0, 0, 0);
 // cubes.push(cube);
 
-//sapi
-// const mtlLoader = new MTLLoader();
-//     mtlLoader.load('./assets/animal//OBJ/Cow.mtl', (mtl) => {
-//       mtl.preload();
-//       const objLoader = new OBJLoader();
-//       mtlLoader.setMaterialOptions( { side: THREE.DoubleSide } );
-//       objLoader.setMaterials(mtl);
-//       objLoader.load('./assets/animal//OBJ/Cow.obj', (root) => {
-//         root.scale.set(5,5,5);
-//         // root.position.x = 100
-//         // root.position.y = -5
-//         root.position.z = -100
-//         scene.add(root);
-//       });
-//     });
-
-
-//kuda
-// const mtlLoader2 = new MTLLoader();
-//     mtlLoader2.load('./assets/animal//OBJ/Horse.mtl', (mtl) => {
-//       mtl.preload();
-//       const objLoader2 = new OBJLoader();
-//       mtlLoader2.setMaterialOptions( { side: THREE.DoubleSide } );
-//       objLoader2.setMaterials(mtl);
-//       objLoader2.load('./assets/animal//OBJ/Horse.obj', (root) => {
-//         root.scale.set(5,5,5);
-//         root.position.x = 100
-//         root.position.y = -5
-//         root.position.z = -50
-//         scene.add(root);
-//       });
-//     });
-
-
 //Light
 
 const solarLight = new THREE.DirectionalLight(0xffffff,1);
@@ -305,62 +275,65 @@ function move(box){
 //checking box boundaries
   if(mov.getComponent(0)!=0){
     if(mov.x > 0){
-      if(box.position.x == 50){
+      if(box.cube.position.x == 50){
         return;
       }
     }
     else{
-      if(box.position.x == -50){
+      if(box.cube.position.x == -50){
         return;
       }
     }
   }
   if(mov.getComponent(1)!=0){
     if(mov.y > 0){
-      if(box.position.y == 100){
+      if(box.cube.position.y == 100){
         return;
       }
     }
     else{
-      if(box.position.y == 0){
+      if(box.cube.position.y == 0){
         return;
       }
     }
   }
   if(mov.getComponent(2)!=0){
     if(mov.z > 0){
-      if(box.position.z == 50){
+      if(box.cube.position.z == 50){
         return;
       }
     }
     else { 
-      if(box.position.z == -50){
+      if(box.cube.position.z == -50){
         return;
       }
     }
   }
 //endof checking box boundaries
 
-  box.position.add(mov);
+  box.cube.position.add(mov);
 }
 
 function gameupdate(){
   cubes.forEach(move);
 }
 
-
-
+//framecounter restrict keyboard input
+var framecounter = 10;
 const animate = () =>
 {
     controls.update();
-    // cubes[0].rotation.x += 0.01;
-    // cubes[0].rotation.y += 0.01;
-
     //render
     // sphereCamera.update(renderer, scene);
-    gameupdate();
+    if(framecounter<5){
+      gameupdate();
+    }
+    // gameupdate();
     renderer.render(scene, camera);
-
+    framecounter +=1;
+    if(framecounter >120000){
+      framecounter = 11;
+    }
     window.requestAnimationFrame(animate);
 }
 animate();
