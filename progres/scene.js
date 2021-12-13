@@ -10,6 +10,36 @@ import {path, box2048} from './kotak.js';
 //canvas
 const canvas = document.querySelector('canvas.webgl')
 
+const startBtn = document.querySelector('.start-btn')
+const bgMusic = new Audio('./music/bg.mp3')
+bgMusic.loop = true
+startBtn.innerText = "start"
+startBtn.addEventListener('click', () => {
+  if(startBtn.innerText == "START"){
+      init()
+      document.querySelector('.modal').style.display = "none"
+  }
+})
+
+async function init(){
+  // await delay(500)
+  // text.innerText = "Starting in 3"
+  // await delay(500)
+  // text.innerText = "Starting in 2"
+  // await delay(500)
+  // text.innerText = "Starting in 1"
+  // lookBackward()
+  // await delay(500)
+  // text.innerText = "Gooo!!!"
+  bgMusic.play()
+  start()
+}
+
+function start(){
+  gameStat = "started"
+}
+
+
 //scene
 const scene = new THREE.Scene();
 
@@ -192,8 +222,17 @@ renderer.render(scene, camera, controls);
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.gammaOutput = true;
 
-const color_black = new THREE.Color("rgb(42,42,42)");
-scene.background = color_black ;
+//panorama
+const panorama = new THREE.CubeTextureLoader();
+const sky = panorama.load([
+  './assets/panorama/px.jpg', './assets/panorama/nx.jpg',
+  './assets/panorama/py.jpg', './assets/panorama/ny.jpg',
+  './assets/panorama/pz.jpg', './assets/panorama/nz.jpg'
+]);
+scene.background = sky;
+
+// const color_black = new THREE.Color("rgb(42,42,42)");
+// scene.background = color_black ;
 
 let geo = new THREE.BoxBufferGeometry(0, 0, 0)
 let mat = new THREE.MeshLambertMaterial({
@@ -217,12 +256,12 @@ mesh.rotation.set(Math.PI / -2, 0, 0)
 scene.add(mesh)
 
 let axis = new THREE.Vector3(0, 1, 0)
-function updateCamera() {
-  camera.position.applyAxisAngle(axis, 0.01)
-}
+// function updateCamera() {
+//   camera.position.applyAxisAngle(axis, 0.01)
+// }
 
 
-const geometry = new THREE.BoxGeometry(10,10,10);
+const geometry = new THREE.BoxGeometry(20,20,20);
 let n = 2048;
 box2048(n);
 const loader = new THREE.TextureLoader();
@@ -239,38 +278,23 @@ const material = new THREE.MeshPhongMaterial( {
 
 //Light
 
-const solarLight = new THREE.DirectionalLight(0xffffff,1);
-solarLight.position.set(-10, 100, 100);
-// solarLight.target.position.set(0, 0,0);
-solarLight.castShadow = true;
-// solarLight.intensity = 1;
-solarLight.shadow.camera.visible = true;
-// solarLight.shadow.mapSize.width = 1024;
-// solarLight.shadow.mapSize.height = 1024;
-// solarLight.shadow.camera.near = 250;
-// solarLight.shadow.camera.far = 1000;
+// const solarLight = new THREE.DirectionalLight(0xffffff,1);
+// solarLight.position.set(-10, 100, 100);
+// solarLight.castShadow = true;
+// solarLight.shadow.camera.visible = true;
+// scene.add(solarLight);
 
-// let intensity = 1;
+let pLight = new THREE.PointLight(0xffffff, 0.8);
+pLight.position.set(1000, 1000, 1000);
+scene.add(pLight);
 
-// solarLight.shadow.camera.left = -intensity;
-// solarLight.shadow.camera.right = intensity;
-// solarLight.shadow.camera.top = intensity;
-// solarLight.shadow.camera.bottom  = -intensity;
-scene.add(solarLight);
-// scene.add(solarLight.target);
-// const helper = new THREE.DirectionalLightHelper( solarLight, 5 );
-// scene.add(helper);
+let pLight2 = new THREE.PointLight(0xffffff, 1);
+pLight2.position.set(-500, 0, 500);
+scene.add(pLight2);
 
-// const solarLight2 = new THREE.DirectionalLight(0xffffff,1);
-// solarLight2.position.set(0, 50, -50);
-// // solarLight2.castShadow = true;
-// // solarLight2.shadow.mapSize.width = 1024;
-// // solarLight2.shadow.mapSize.height = 1024;
-// // solarLight2.shadow.camera.near = 250;
-// // solarLight2.shadow.camera.far = 1000;
-// scene.add(solarLight2)
-// const helper2 = new THREE.DirectionalLightHelper( solarLight2, 5 );
-// scene.add(helper2);
+let pLight3 = new THREE.PointLight(0xffffff, 1);
+pLight3.position.set(-500, 1000, -500);
+scene.add(pLight3);
 
 function move(box){
 
@@ -335,7 +359,7 @@ const animate = () =>
         ccube.cube.castShadow = true;
         ccube.cube.receiveShadow = true;
     
-        ccube.cube.position.set(getrand(),getrand()+50,getrand());
+        ccube.cube.position.set(getrand(),getrand()+55,getrand());
         
         
         // cubes.add(ccube);
