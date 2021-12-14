@@ -78,343 +78,6 @@ function checkEmpty(){
 }
 
 
-// function moveX(pos){
-//   var m,n;
-//   if(pos == 1){
-//     m=3;
-//     n=1;
-//     for(var i=0;i<9;i++){
-//       if((gamegrid[i*m+2*n]==gamegrid[i*m+n])&&(gamegrid[i*m+2*m]!=0)){
-//         todelete.push(i*m+2*n);
-//         moveone.push(i*m+n);
-//         todelete.push(i*m+n)
-//         moveone.push(i*m);
-//         gamegrid[i*m+2*n] = gamegrid[i*m+2*n]*2;
-//         gamegrid[i*m+n] = gamegrid[i*m];
-//         gamegrid[i*m] = 0;
-//         tomake.push(i*m+2*n);
-//       }
-//       else if(gamegrid[i*m+2*n]==0){
-//         if((gamegrid[i*m]==gamegrid[i*m+n])&&(gamegrid[i*m]!=0)){
-//           movetwo.push(i*m);
-//           moveone.push(i*m+n);
-//           todelete.push(i*m);
-//           todelete.push(i*m+n);
-//           gamegrid[i*m+2*n] = gamegrid[i*m+n]*2;
-//           gamegrid[i*m+n] = 0;
-//           gamegrid[i*m] = 0;
-//           tomake.push(i*m+2*n);
-//         }
-//         else if(gamegrid[i*m+n]==0){
-//           movetwo.push(i*m);
-//           gamegrid[i*m+2*n] = gamegrid[i*m];
-//           gamegrid[i*m] = 0;
-//         }
-//         else{
-//           moveone.push(i*m);
-//           moveone.push(i*m+n);
-//           gamegrid[i*m+2*n] = gamegrid[i*m+n];
-//           gamegrid[i*m+n] = gamegrid[i*m];
-//           gamegrid[i*m] = 0;
-//         }
-//       }
-//       else if((gamegrid[i*m]==gamegrid[i*m+n])&&(gamegrid[i*m]!=0)){
-//         moveone.push(i*m);
-//         todelete.push(i*m);
-//         todelete.push(i*m+n);
-//         gamegrid[i*m+n]=gamegrid[i*m+n]*2;
-//         gamegrid[i*m]=0;
-//         tomake.push(i*m+n);
-//       }
-//       else if(gamegrid[i*m+n]==0){
-//         moveone.push(i*m);
-//         gamegrid[i*m+n]=gamegrid[i*m];
-//         gamegrid[i*m]=0;
-//       }
-
-//     }
-//   }
-//   if(pos == -1){
-//     m=3;
-//     n=-1;
-//     for(var i=9;i>0;i--){
-//       if((gamegrid[i*m-1+2*n]==gamegrid[i*m-1+n])&&(gamegrid[i*m-1+2*n]!=0)){
-//         todelete.push(i*m-1+2*n);
-//         moveone.push(i*m-1+n);
-//         todelete.push(i*m-1+n)
-//         moveone.push(i*m-1);
-//         gamegrid[i*m-1+2*n] = gamegrid[i*m-1+2*n]*2;
-//         gamegrid[i*m-1+n] = gamegrid[i*m-1];
-//         gamegrid[i*m-1] = 0;
-//         tomake.push(i*m-1+2*n);
-//       }
-//       else if(gamegrid[i*m+2*n]==0){
-//         if((gamegrid[i*m]==gamegrid[i*m+n])&&(gamegrid[i*m]!=0)){
-//           movetwo.push(i*m);
-//           moveone.push(i*m+n);
-//           todelete.push(i*m);
-//           todelete.push(i*m+n);
-//           gamegrid[i*m+2*n] = gamegrid[i*m+n]*2;
-//           gamegrid[i*m+n] = 0;
-//           gamegrid[i*m] = 0;
-//           tomake.push(i*m+2*n);
-//         }
-//         else if(gamegrid[i*m+n]==0){
-//           movetwo.push(i*m);
-//           gamegrid[i*m+2*n] = gamegrid[i*m];
-//           gamegrid[i*m] = 0;
-//         }
-//         else{
-//           moveone.push(i*m);
-//           moveone.push(i*m+n);
-//           gamegrid[i*m+2*n] = gamegrid[i*m+n];
-//           gamegrid[i*m+n] = gamegrid[i*m];
-//           gamegrid[i*m] = 0;
-//         }
-//       }
-//       else if((gamegrid[i*m]==gamegrid[i*m+n])&&(gamegrid[i*m])!=0){
-//         moveone.push(i*m);
-//         todelete.push(i*m);
-//         todelete.push(i*m+n);
-//         gamegrid[i*m+n]=gamegrid[i*m+n]*2;
-//         gamegrid[i*m]=0;
-//         tomake.push(i*m+n);
-//       }
-//       else if(gamegrid[i*m+n]==0){
-//         moveone.push(i*m);
-//         gamegrid[i*m+n]=gamegrid[i*m];
-//         gamegrid[i*m]=0;
-//       }
-//     }
-//   }
-// }
-
-// function moveY(pos){
-//   var m,n;
-  
-//   if(pos == 1){
-//     m=1;
-//     n=9;
-//     for(var i=0;i<9;i++){
-//       if((gamegrid[i*m+2*n]==gamegrid[i*m+n]) && (gamegrid[i*m+2*n]!= 0)){
-//         todelete.push(i*m+2*n);
-//         moveone.push(i*m+n);
-//         todelete.push(i*m+n)
-//         moveone.push(i*m);
-//         gamegrid[i*m+2*n] = gamegrid[i*m+2*n]*2;
-//         gamegrid[i*m+n] = gamegrid[i*m];
-//         gamegrid[i*m] = 0;
-//         tomake.push(i*m+2*n);
-//       }
-//       else if(gamegrid[i*m+2*n]==0){
-//         if((gamegrid[i*m]==gamegrid[i*m+n])&&(gamegrid[i*m] != 0)){
-//           movetwo.push(i*m);
-//           moveone.push(i*m+n);
-//           todelete.push(i*m);
-//           todelete.push(i*m+n);
-//           gamegrid[i*m+2*n] = gamegrid[i*m+n]*2;
-//           gamegrid[i*m+n] = 0;
-//           gamegrid[i*m] = 0;
-//           tomake.push(i*m+2*n);
-//         }
-//         else if(gamegrid[i*m+n]==0){
-//           movetwo.push(i*m);
-//           gamegrid[i*m+2*n] = gamegrid[i*m];
-//           gamegrid[i*m] = 0;
-//         }
-//         else{
-//           moveone.push(i*m);
-//           moveone.push(i*m+n);
-//           gamegrid[i*m+2*n] = gamegrid[i*m+n];
-//           gamegrid[i*m+n] = gamegrid[i*m];
-//           gamegrid[i*m] = 0;
-//         }
-//       }
-//       else if((gamegrid[i*m]==gamegrid[i*m+n])&&(gamegrid[i*m]!=0)){
-//         moveone.push(i*m);
-//         todelete.push(i*m);
-//         todelete.push(i*m+n);
-//         gamegrid[i*m+n]=gamegrid[i*m+n]*2;
-//         gamegrid[i*m]=0;
-//         tomake.push(i*m+n);
-//       }
-//       else if(gamegrid[i*m+n]==0){
-//         moveone.push(i*m);
-//         gamegrid[i*m+n]=gamegrid[i*m];
-//         gamegrid[i*m]=0;
-//       }
-
-//     }
-
-//   }
-//   if(pos == -1){
-//     m=1;
-//     n=-9;
-//     for(var i=27;i>18;i--){
-//       if((gamegrid[i*m-1+2*n]==gamegrid[i*m-1+n])&&(gamegrid[i*m-1+n]!=0)){
-//         todelete.push(i*m-1+2*n);
-//         moveone.push(i*m-1+n);
-//         todelete.push(i*m-1+n)
-//         moveone.push(i*m-1);
-//         gamegrid[i*m-1+2*n] = gamegrid[i*m-1+2*n]*2;
-//         gamegrid[i*m-1+n] = gamegrid[i*m-1];
-//         gamegrid[i*m-1] = 0;
-//         tomake.push(i*m-1+2*n);
-//       }
-//       else if(gamegrid[i*m+2*n]==0){
-//         if((gamegrid[i*m]==gamegrid[i*m+n])&&(gamegrid[i*m]!=0)){
-//           movetwo.push(i*m);
-//           moveone.push(i*m+n);
-//           todelete.push(i*m);
-//           todelete.push(i*m+n);
-//           gamegrid[i*m+2*n] = gamegrid[i*m+n]*2;
-//           gamegrid[i*m+n] = 0;
-//           gamegrid[i*m] = 0;
-//           tomake.push(i*m+2*n);
-//         }
-//         else if(gamegrid[i*m+n]==0){
-//           movetwo.push(i*m);
-//           gamegrid[i*m+2*n] = gamegrid[i*m];
-//           gamegrid[i*m] = 0;
-//         }
-//         else{
-//           moveone.push(i*m);
-//           moveone.push(i*m+n);
-//           gamegrid[i*m+2*n] = gamegrid[i*m+n];
-//           gamegrid[i*m+n] = gamegrid[i*m];
-//           gamegrid[i*m] = 0;
-//         }
-//       }
-//       else if((gamegrid[i*m]==gamegrid[i*m+n])&&(gamegrid[i*m]!=0)){
-//         moveone.push(i*m);
-//         todelete.push(i*m);
-//         todelete.push(i*m+n);
-//         gamegrid[i*m+n]=gamegrid[i*m+n]*2;
-//         gamegrid[i*m]=0;
-//         tomake.push(i*m+n);
-//       }
-//       else if(gamegrid[i*m+n]==0){
-//         moveone.push(i*m);
-//         gamegrid[i*m+n]=gamegrid[i*m];
-//         gamegrid[i*m]=0;
-//       }
-//     }
-//   }
-// }
-
-// function moveZ(pos){
-//   var m,n;
-//   if(pos == 1){
-//     m=0;
-//     n=3;
-//     for(var i=0;i<9;i++){
-//       m= Math.floor(i/3)*9;
-//       if((gamegrid[i+m+2*n]==gamegrid[i+m+n])&&(gamegrid[i+m+2*n]!=0)){
-//         todelete.push(i+m+2*n);
-//         moveone.push(i+m+n);
-//         todelete.push(i+m+n)
-//         moveone.push(i+m);
-//         gamegrid[i+m+2*n] = gamegrid[i+m+2*n]*2;
-//         gamegrid[i+m+n] = gamegrid[i+m];
-//         gamegrid[i+m] = 0;
-//         tomake.push(i+m+2*n);
-//       }
-//       else if(gamegrid[i+m+2*n]==0){
-//         if((gamegrid[i+m]==gamegrid[i+m+n])&&(gamegrid[i+m]!=0)){
-//           movetwo.push(i+m);
-//           moveone.push(i+m+n);
-//           todelete.push(i+m);
-//           todelete.push(i+m+n);
-//           gamegrid[i+m+2*n] = gamegrid[i+m+n]*2;
-//           gamegrid[i+m+n] = 0;
-//           gamegrid[i+m] = 0;
-//           tomake.push(i+m+2*n);
-//         }
-//         else if(gamegrid[i+m+n]==0){
-//           movetwo.push(i+m);
-//           gamegrid[i+m+2*n] = gamegrid[i+m];
-//           gamegrid[i+m] = 0;
-//         }
-//         else{
-//           moveone.push(i+m);
-//           moveone.push(i+m+n);
-//           gamegrid[i+m+2*n] = gamegrid[i+m+n];
-//           gamegrid[i+m+n] = gamegrid[i+m];
-//           gamegrid[i+m] = 0;
-//         }
-//       }
-//       else if((gamegrid[i+m]==gamegrid[i+m+n])&&(gamegrid[i+m]!=0)){
-//         moveone.push(i+m);
-//         todelete.push(i+m);
-//         todelete.push(i+m+n);
-//         gamegrid[i+m+n]=gamegrid[i+m+n]*2;
-//         gamegrid[i+m]=0;
-//         tomake.push(i+m+n);
-//       }
-//       else if(gamegrid[i+m+n]==0){
-//         moveone.push(i+m);
-//         gamegrid[i+m+n]=gamegrid[i+m];
-//         gamegrid[i+m]=0;
-//       }
-
-//     }
-//   }
-//   if(pos == -1){
-//     m=1;
-//     n=-3;
-//     for(var i=9;i>0;i--){
-//       m= Math.floor(i/3)*9;
-//       if((gamegrid[i*m-1+2*n]==gamegrid[i*m-1+n])&&(gamegrid[i+m+2*n]!=0)){
-//         todelete.push(i*m-1+2*n);
-//         moveone.push(i*m-1+n);
-//         todelete.push(i*m-1+n)
-//         moveone.push(i*m-1);
-//         gamegrid[i*m-1+2*n] = gamegrid[i*m-1+2*n]*2;
-//         gamegrid[i*m-1+n] = gamegrid[i*m-1];
-//         gamegrid[i*m-1] = 0;
-//         tomake.push(i*m-1+2*n);
-//       }
-//       else if(gamegrid[i*m+2*n]==0){
-//         if((gamegrid[i*m]==gamegrid[i*m+n])&&(gamegrid[i*m]!=0)){
-//           movetwo.push(i*m);
-//           moveone.push(i*m+n);
-//           todelete.push(i*m);
-//           todelete.push(i*m+n);
-//           gamegrid[i*m+2*n] = gamegrid[i*m+n]*2;
-//           gamegrid[i*m+n] = 0;
-//           gamegrid[i*m] = 0;
-//           tomake.push(i*m+2*n);
-//         }
-//         else if(gamegrid[i*m+n]==0){
-//           movetwo.push(i*m);
-//           gamegrid[i*m+2*n] = gamegrid[i*m];
-//           gamegrid[i*m] = 0;
-//         }
-//         else{
-//           moveone.push(i*m);
-//           moveone.push(i*m+n);
-//           gamegrid[i*m+2*n] = gamegrid[i*m+n];
-//           gamegrid[i*m+n] = gamegrid[i*m];
-//           gamegrid[i*m] = 0;
-//         }
-//       }
-//       else if((gamegrid[i*m]==gamegrid[i*m+n])&&(gamegrid[i*m]!=0)){
-//         moveone.push(i*m);
-//         todelete.push(i*m);
-//         todelete.push(i*m+n);
-//         gamegrid[i*m+n]=gamegrid[i*m+n]*2;
-//         gamegrid[i*m]=0;
-//         tomake.push(i*m+n);
-//       }
-//       else if(gamegrid[i*m+n]==0){
-//         moveone.push(i*m);
-//         gamegrid[i*m+n]=gamegrid[i*m];
-//         gamegrid[i*m]=0;
-//       }
-//     }
-//   }
-// }
-
 
 //insert box to grid randomly
 // const convertedPos = new THREE.Vector3();
@@ -439,6 +102,7 @@ function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         todelete.push(zIndex);
         todelete.push(yIndex);
         tomake.push(zIndex);
+        tomake.push(z+y);
         gamegrid[zIndex]= x+y;
         gamegrid[yIndex]= 0 ;
         if(x != 0){
@@ -461,6 +125,7 @@ function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         todelete.push(yIndex);
         todelete.push(xIndex);
         tomake.push(yIndex);
+        tomake.push(x+y);
         gamegrid[yIndex]= x+y;
         gamegrid[xIndex]= 0;
       }
@@ -474,6 +139,7 @@ function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         todelete.push(yIndex);
         todelete.push(xIndex);
         tomake.push(zIndex);
+        tomake.push(x+y);
         gamegrid[zIndex] = x+y;
         gamegrid[yIndex]= 0;
         gamegrid[xIndex]= 0;
@@ -545,12 +211,16 @@ function moveZ(pos){
 
 const mov = new THREE.Vector3();
 
-
+// function removeselectcube(box){
+//   if (box.deleted == 1){
+//     scene.remove(box.cube);
+//   }
+// }
 function removecube(box){
   // box.remove();
   scene.remove(box.cube);
 }
-function gridmanager(box){
+async function gridmanager(box){
   box.calcindex();
   if(moveone.includes(box.gridindex)){
     box.tomove = 50;
@@ -561,6 +231,7 @@ function gridmanager(box){
   if(todelete.includes(box.gridindex)){
     box.deleted = 1;
   }
+  console.log(box.gridindex);
 }
 //size
 const sizes = {
@@ -632,12 +303,15 @@ function onDocumentKeyDown(event){
     if(keyCode == 32){
       console.log(gamegrid);
       framecounter = 10;
+      console.log(movetwo);
+      console.log(moveone);
     }
     cubes.forEach(gridmanager);
+    console.log("donemanagergrid");
     // console.log("movone");
-    // console.log(moveone);
+    // ;
     // console.log("movtwo");
-    // console.log(movetwo);
+    // 
 
 
   
@@ -830,7 +504,27 @@ function updatepos(){
 }
 
 function gridExec(){
-  
+  cubes.slice(0).forEach(function(box){
+    if(box.deleted == 1){
+
+      scene.remove(box.cube);
+      cubes.splice(cubes.indexOf(box));
+    }
+  });
+  while(tomake.length>0){
+    var num = tomake.shift();
+    x = (num % 3) -1;
+    y = Math.floor(num/9);
+    z = Math.floor((num %9)/3) -1;
+    var ccube = new cubetiles(tomake.shift()-1)
+    ccube.cube.castShadow = true;
+    ccube.cube.receiveShadow = true;
+    ccube.cube.position.set(x,y,z);
+    ccube.cube.position.multiplyScalar(50);
+    ccube.cube.position.y +=10;
+    scene.add(ccube.cube);
+    cubes.push(ccube);
+  }
 
   checkEmpty();
   
@@ -838,7 +532,7 @@ function gridExec(){
     // console.log(framecounter);
     // spawnbox();
     //spawning newbox randomly start
-    var num = Math.floor(Math.random()*(emptygrid.length)-1);
+    var num = Math.floor(Math.random()*(emptygrid.length+1)-1);
     gamegrid[emptygrid[num]] = 1;
     emptygrid.length = 0;
     var x,y,z;
@@ -859,25 +553,8 @@ function gridExec(){
 
   moveone.length = 0;
   movetwo.length = 0;
+  todelete.length = 0;
 }
-
-// checkEmpty();
-// var num = Math.floor(Math.random()*(emptygrid.length+1)-1);
-//   gamegrid[emptygrid[num]] = 1;
-//   emptygrid.length = 0;
-//   var x,y,z;
-//   x = (num % 3) -1;
-//   y = Math.floor(num/9);
-//   z = Math.floor((num %9)/3) -1;
-//   // convertedPos.set(x,y,z);
-//   var ccube = new cubetiles(0);
-//   ccube.cube.castShadow = true;
-//   ccube.cube.receiveShadow = true;
-//   ccube.cube.position.set(x,y,z);
-//   ccube.cube.position.multiplyScalar(50);
-//   ccube.cube.position.y +=10;
-//   scene.add(ccube.cube);
-//   cubes.push(ccube);
 
 var framecounter = 0;
 const animate = () =>
@@ -889,16 +566,6 @@ const animate = () =>
       updatepos();
       if(framecounter == 9){
         gridExec();
-
-        // var ccube = new cubetiles(0);
-        // ccube.cube.castShadow = true;
-        // ccube.cube.receiveShadow = true;
-        // ccube.cube.position.set(getrand(),getrand()+60,getrand());
-        // scene.add(ccube.cube);
-        // cubes.push(ccube);
-
-
-        // console.log(framecounter);
       }
     }
     renderer.render(scene, camera);
