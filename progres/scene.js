@@ -1,15 +1,12 @@
 import * as THREE from './js/three.module.js';
 import {OrbitControls} from './js/OrbitControls.js';
-import {GLTFLoader} from './js/GLTFLoader.js';
-import {OBJLoader} from './js/OBJLoader.js';
-import {MTLLoader} from './js/MTLLoader.js';
-import {Reflector} from './js/objects/Reflector.js';
+import { loadObjek } from './objek.js';
 import * as dat from './js/libs/dat.gui.module.js';
 import {path, box2048} from './kotak.js';
 
 //canvas
 const canvas = document.querySelector('canvas.webgl')
-
+const gameStat = "loading"
 const startBtn = document.querySelector('.start-btn')
 const bgMusic = new Audio('./music/bg.mp3')
 bgMusic.loop = true
@@ -31,12 +28,18 @@ async function init(){
   // lookBackward()
   // await delay(500)
   // text.innerText = "Gooo!!!"
+  const {tree1, tree2, tree3, castle, slide, rock, 
+    bush1, bush2, bush3, bush4, bush5, tree4,tree5,
+          } = await loadObjek();
+  scene.add(tree1, tree2, tree3, castle, slide, rock,
+    bush1, bush2, bush3, bush4, bush5, tree4,tree5,
+    );
   bgMusic.play()
-  start()
+  start();
 }
 
 function start(){
-  gameStat = "started"
+  gameStat = "started";
 }
 
 
@@ -65,38 +68,6 @@ const movetwo = [];
 const moveone = [];
 const movenull = [];
 const cubes = [];
-
-//move cubes
-
-// function movecuberight(box){
-//   if(box.position.x < 50)
-//   box.position.x += 50;
-// }
-
-// function movecubeleft(box){
-//   if(box.position.x > -50)
-//   box.position.x -= 50;
-// }
-
-// function movecubeback(box){
-//   if(box.position.z > -50)
-//   box.position.z -= 50;
-// }
-
-// function movecubefront(box){
-//   if(box.position.z < 50)
-//   box.position.z += 50;
-// }
-
-// function movecubeup(box){
-//   if(box.position.y < 100)
-//   box.position.y += 50;
-// }
-
-// function movecubedown(box){
-//   if(box.position.y > 0)
-//   box.position.y -= 50;
-// }
 
 //move vector
 const mov = new THREE.Vector3();
@@ -198,8 +169,8 @@ const controls = new OrbitControls(camera, canvas);
 camera.position.set( 0, 50, 200 );
 // controls.target.set(10, 10, 10);
 controls.smoothZoom = true;
-// controls.minDistance = 50;
-controls.maxDistance = 200;
+controls.minDistance = 50;
+controls.maxDistance = 500;
 controls.enablePan = true;
 controls.maxPolarAngle = Math.PI / 2;
 controls.update();
@@ -243,10 +214,10 @@ scene.add(mesh)
 
 let tex = new THREE.TextureLoader().load("./assets/grass.jpg")
 tex.anisotropy = 100
-tex.repeat.set(100, 100)
+tex.repeat.set(50, 50)
 tex.wrapT = THREE.RepeatWrapping
 tex.wrapS = THREE.RepeatWrapping
-geo = new THREE.PlaneBufferGeometry(10000, 10000)
+geo = new THREE.PlaneBufferGeometry(1500, 1500)
 mat = new THREE.MeshLambertMaterial({
   map: tex
 })
@@ -261,9 +232,8 @@ let axis = new THREE.Vector3(0, 1, 0)
 // }
 
 
-const geometry = new THREE.BoxGeometry(20,20,20);
-let n = 2048;
-box2048(n);
+const geometry = new THREE.BoxGeometry(10,10,10);
+box2048(2);
 const loader = new THREE.TextureLoader();
 const material = new THREE.MeshPhongMaterial( {
   map: loader.load(path),
@@ -278,23 +248,37 @@ const material = new THREE.MeshPhongMaterial( {
 
 //Light
 
-// const solarLight = new THREE.DirectionalLight(0xffffff,1);
-// solarLight.position.set(-10, 100, 100);
-// solarLight.castShadow = true;
-// solarLight.shadow.camera.visible = true;
-// scene.add(solarLight);
+const solarLight = new THREE.DirectionalLight(0xffffff,1);
+solarLight.position.set(-10, 100, 100);
+solarLight.castShadow = true;
+solarLight.shadow.camera.visible = true;
+scene.add(solarLight);
 
-let pLight = new THREE.PointLight(0xffffff, 0.8);
-pLight.position.set(1000, 1000, 1000);
-scene.add(pLight);
+solarLight.shadow.mapSize.width = 512; // default
+solarLight.shadow.mapSize.height = 512; // default
+solarLight.shadow.camera.near = 10; // default
+solarLight.shadow.camera.far = 500; // default
 
-let pLight2 = new THREE.PointLight(0xffffff, 1);
-pLight2.position.set(-500, 0, 500);
-scene.add(pLight2);
+// const helper = new THREE.CameraHelper( solarLight.shadow.camera );
+// scene.add(new THREE.CameraHelper(camera)) 
+// scene.add( helper );
+
+// let pLight = new THREE.PointLight(0xffffff, 0.2);
+// pLight.position.set(1000, 1000, 1000);
+// scene.add(pLight);
+
+// let pLight2 = new THREE.PointLight(0xffffff, 1);
+// pLight2.position.set(-500, 0, 500);
+// scene.add(pLight2);
 
 let pLight3 = new THREE.PointLight(0xffffff, 1);
 pLight3.position.set(-500, 1000, -500);
 scene.add(pLight3);
+
+// const helper2 = new THREE.CameraHelper( pLight3.shadow.camera );
+// scene.add( helper2 );
+
+scene.fog = new THREE.Fog( 0xffffff, 100, 10000 ); 
 
 function move(box){
 
@@ -359,7 +343,7 @@ const animate = () =>
         ccube.cube.castShadow = true;
         ccube.cube.receiveShadow = true;
     
-        ccube.cube.position.set(getrand(),getrand()+55,getrand());
+        ccube.cube.position.set(getrand(),getrand()+50,getrand());
         
         
         // cubes.add(ccube);
