@@ -98,7 +98,7 @@ function checkEmpty(){
 //move vector
 
 
-function xtoZ(xIndex,x,yIndex,y,zIndex,z){
+async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
   if(z!=0){
     if(z == y){
         moveone.push(yIndex);
@@ -106,7 +106,7 @@ function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         todelete.push(yIndex);
         tomake.push(zIndex);
         tomake.push(z+y);
-        gamegrid[zIndex]= x+y;
+        gamegrid[zIndex]= z+y;
         gamegrid[yIndex]= 0 ;
         if(x != 0){
           moveone.push(xIndex);
@@ -181,7 +181,6 @@ function moveX(pos){
   }
 }
 //move vector
-const mov = new THREE.Vector3();
 
 function moveY(pos){
   if(pos == 1){
@@ -230,7 +229,7 @@ async function gridmanager(box){
   if(moveone.includes(box.gridindex)){
     box.tomove = 50;
   }
-  else if(movetwo.includes(box.gridindex)){
+  if(movetwo.includes(box.gridindex)){
     box.tomove = 100;
   }
   if(todelete.includes(box.gridindex)){
@@ -273,6 +272,7 @@ function onDocumentKeyDown(event){
     if(framecounter <= 10){
       return;
     }
+    console.log(gamegrid);
     if (keyCode == 87){
       // cubes.forEach(movecubeback);
       mov.set(0,0,-10);
@@ -307,12 +307,14 @@ function onDocumentKeyDown(event){
     framecounter = 0;
     if(keyCode == 32){
       console.log(gamegrid);
-      framecounter = 10;
+      // framecounter = 10;
       console.log(movetwo);
       console.log(moveone);
     }
     cubes.forEach(gridmanager);
-    console.log("donemanagergrid");
+    console.log(movetwo);
+      console.log(moveone);
+      console.log(gamegrid);
     // console.log("movone");
     // ;
     // console.log("movtwo");
@@ -471,7 +473,7 @@ scene.add(pLight3);
 
 scene.fog = new THREE.Fog( 0xffffff, 100, 10000 ); 
 
-function move(box){
+async function move(box){
 if(box.tomove <= 0){
   return;
 }
@@ -535,7 +537,7 @@ function gridExec(){
     x = (num % 3) -1;
     y = Math.floor(num/9);
     z = Math.floor((num %9)/3) -1;
-    var ccube = new cubetiles(tomake.shift()-1)
+    var ccube = new cubetiles(Math.log2(tomake.shift()));
     ccube.cube.castShadow = true;
     ccube.cube.receiveShadow = true;
     ccube.cube.position.set(x,y,z);
@@ -575,7 +577,7 @@ function gridExec(){
   todelete.length = 0;
 }
 
-var framecounter = 0;
+var framecounter = 11;
 const animate = () =>
 {
     controls.update();
