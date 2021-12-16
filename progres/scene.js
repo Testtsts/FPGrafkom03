@@ -48,18 +48,42 @@ const scene = new THREE.Scene();
 
 
 class cubetiles {
-  cube;
-  value;
-  tomove;
-  deleted;
-  gridindex;
+  // cube;
+  // value;
+  // tomove;
+  // deleted;
+  // gridindex;
   constructor(value){
     this.cube = new THREE.Mesh(geometry,materialcontainer[value]);
     this.value = value+1;
     this.tomove = 0;
   }
   calcindex(){
-    this.gridindex = 4 + Math.floor(this.cube.position.x/50) + Math.floor(this.cube.position.z/50)*3 + Math.floor(this.cube.position.y/50)*9;
+    this.gridindex = 4 + Math.floor(this.cube.position.x/50) + Math.floor(this.cube.position.z/50)*3 + Math.floor(((this.cube.position.y-10)/50))*9;
+  }
+  deleting(){
+    this.deleted = 1;
+  }
+  moveOne(){
+    this.tomove = 50;
+  }
+  moveTwo(){
+    this.tomove = 100;
+  }
+  move(){
+    this.tomove -= 10;
+  }
+  canMove(){
+    if (this.tomove > 0){
+      return true;
+    }
+    return false;
+  } 
+  getValue(){
+    return Number(this.value);
+  }
+  getGridIndex(){
+    return Number(this.gridindex);
   }
 }
 
@@ -105,21 +129,29 @@ async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         todelete.push(zIndex);
         todelete.push(yIndex);
         tomake.push(zIndex);
-        tomake.push(z+y);
-        gamegrid[zIndex]= z+y;
-        gamegrid[yIndex]= 0 ;
+        tomake.push(z+1);
+        //gamegrid[zIndex]= z+y;
+        //gamegrid[yIndex]= 0 ;
         if(x != 0){
           moveone.push(xIndex);
-          gamegrid[yIndex]= x;
-          gamegrid[xIndex]=0;
+          //gamegrid[yIndex]= x;
+          //gamegrid[xIndex]=0;
         }
         
     }
     else if(y == 0){
-      if(x != 0){
+      
+      if ( x== z){
+        movetwo.push(xIndex);
+        todelete.push(xIndex);
+        todelete.push(zIndex);
+        tomake.push(zIndex);
+        tomake.push(z+1);
+      }
+      else if(x != 0){
         moveone.push(xIndex);
-        gamegrid[yIndex]= x;
-        gamegrid[xIndex]= 0;
+        //gamegrid[yIndex]= x;
+        //gamegrid[xIndex]= 0;
       }
     }
     else{
@@ -128,9 +160,9 @@ async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         todelete.push(yIndex);
         todelete.push(xIndex);
         tomake.push(yIndex);
-        tomake.push(x+y);
-        gamegrid[yIndex]= x+y;
-        gamegrid[xIndex]= 0;
+        tomake.push(x+1);
+        //gamegrid[yIndex]= x+y;
+        //gamegrid[xIndex]= 0;
       }
     }
   }
@@ -142,33 +174,33 @@ async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         todelete.push(yIndex);
         todelete.push(xIndex);
         tomake.push(zIndex);
-        tomake.push(x+y);
-        gamegrid[zIndex] = x+y;
-        gamegrid[yIndex]= 0;
-        gamegrid[xIndex]= 0;
+        tomake.push(x+1);
+        //gamegrid[zIndex] = x+y;
+        //gamegrid[yIndex]= 0;
+        //gamegrid[xIndex]= 0;
       }
       else{
         moveone.push(yIndex);
-        gamegrid[zIndex]=y;
-        gamegrid[yIndex]=0;
+        //gamegrid[zIndex]=y;
+        //gamegrid[yIndex]=0;
         if(x !=0){
           moveone.push(xIndex);
-          gamegrid[yIndex]=x;
-          gamegrid[xIndex]=0;
+          //gamegrid[yIndex]=x;
+          //gamegrid[xIndex]=0;
         }
       }
     }
     else{ 
       if(x!=0){
         movetwo.push(xIndex);
-        gamegrid[xIndex]=0;
-        gamegrid[zIndex]=x;
+        //gamegrid[xIndex]=0;
+        //gamegrid[zIndex]=x;
       }
     }
   }
 }
 
-function moveX(pos){
+ function moveX(pos){
   if(pos == 1){
     for(var i= 0;i<9;i++){
       xtoZ(i*3,gamegrid[i*3],i*3+1,gamegrid[i*3+1],i*3+2,gamegrid[i*3+2]);
@@ -224,18 +256,33 @@ function removecube(box){
   // box.remove();
   scene.remove(box.cube);
 }
-async function gridmanager(box){
-  box.calcindex();
-  if(moveone.includes(box.gridindex)){
-    box.tomove = 50;
+function gridmanager(box){
+  // box.calcindex();
+  // for(var i=0;i<moveone.length;i++){
+
+  // }
+  var i;
+  for(i = moveone.length;i>0;i--){
+    if(box.gridindex == moveone[i-1]){
+      box.moveOne();
+      moveone.splice(i-1,1);
+      break;
+    }
   }
-  if(movetwo.includes(box.gridindex)){
-    box.tomove = 100;
+  for(i = movetwo.length;i>0;i--){
+    if(box.gridindex == movetwo[i-1]){
+      box.moveTwo();
+      movetwo.splice(i-1,1);
+      break;
+    }
   }
-  if(todelete.includes(box.gridindex)){
-    box.deleted = 1;
+  for(i = todelete.length;i>0;i--){
+    if(box.gridindex == todelete[i-1]){
+      box.deleting();
+      // todelete.splice(i-1,1);
+      break;
+    }
   }
-  console.log(box.gridindex);
 }
 //size
 const sizes = {
@@ -267,35 +314,29 @@ function onDocumentKeyDown(event){
     let keyCode = event.which;
     if (keyCode == 8){
       cubes.forEach(removecube);
+      cubes.length = 0;
       return;
     }
     if(framecounter <= 10){
       return;
     }
-    console.log(gamegrid);
     if (keyCode == 87){
-      // cubes.forEach(movecubeback);
       mov.set(0,0,-10);
       moveZ(-1);
     }
     if (keyCode == 83){
-      // cubes.forEach(movecubefront);
       mov.set(0,0,10);
       moveZ(1);
     }
     if (keyCode == 65){
-      // cubes.forEach(movecubeleft);
       mov.set(-10,0,0);
       moveX(-1);
     }
     if (keyCode == 68){
-      // cubes.forEach(movecuberight);
       mov.set(10,0,0);
       moveX(1);
-      // console.log(moveone);
     }
     if (keyCode == 69){
-      // cubes.forEach(movecubeup);
       mov.set(0,10,0);
       moveY(1);
     }
@@ -306,19 +347,12 @@ function onDocumentKeyDown(event){
     
     framecounter = 0;
     if(keyCode == 32){
-      console.log(gamegrid);
       // framecounter = 10;
-      console.log(movetwo);
-      console.log(moveone);
     }
-    cubes.forEach(gridmanager);
-    console.log(movetwo);
-      console.log(moveone);
-      console.log(gamegrid);
-    // console.log("movone");
-    // ;
-    // console.log("movtwo");
-    // 
+    // cubes.forEach(gridmanager);
+    for(var i=0;i<cubes.length;i++){
+      gridmanager(cubes[i]);
+    }
 
 
   
@@ -334,6 +368,8 @@ function onDocumentKeyDown(event){
     // scene.add(ccube.cube);
     // cubes.push(ccube);
     // console.log(cubes.length);
+    // moveone.length = 0;
+    // movetwo.length = 0;
 };
 
 // Camera
@@ -388,7 +424,7 @@ let geo = new THREE.BoxBufferGeometry(0, 0, 0)
 let mat = new THREE.MeshLambertMaterial({
     // color: "white"
 })
-let mesh = new THREE.Mesh(geo, mat)
+let mesh = new THREE.Mesh(geo, mat);
 scene.add(mesh)
 
 let tex = new THREE.TextureLoader().load("./assets/grass.jpg")
@@ -396,14 +432,14 @@ tex.anisotropy = 100
 tex.repeat.set(50, 50)
 tex.wrapT = THREE.RepeatWrapping
 tex.wrapS = THREE.RepeatWrapping
-geo = new THREE.PlaneBufferGeometry(1500, 1500)
+geo = new THREE.PlaneBufferGeometry(1500, 1500);
 mat = new THREE.MeshLambertMaterial({
   map: tex
 })
-mesh = new THREE.Mesh(geo, mat)
-mesh.position.set(0, -5, 0)
-mesh.rotation.set(Math.PI / -2, 0, 0)
-scene.add(mesh)
+mesh = new THREE.Mesh(geo, mat);
+mesh.position.set(0, -5, 0);
+mesh.rotation.set(Math.PI / -2, 0, 0);
+scene.add(mesh);
 
 let axis = new THREE.Vector3(0, 1, 0)
 // function updateCamera() {
@@ -473,8 +509,8 @@ scene.add(pLight3);
 
 scene.fog = new THREE.Fog( 0xffffff, 100, 10000 ); 
 
-async function move(box){
-if(box.tomove <= 0){
+function move(box){
+if(!box.canMove()){
   return;
 }
 
@@ -516,64 +552,74 @@ if(box.tomove <= 0){
   //   }
   // }
 //endof checking box boundaries
-  box.tomove -=10;
+  box.move();
   box.cube.position.add(mov);
 }
 
-function updatepos(){
-  cubes.forEach(move);
-}
+// function updatepos(){
+  // cubes.forEach(move);
+// }
 
-function gridExec(){
-  cubes.slice(0).forEach(function(box){
-    if(box.deleted == 1){
+ function gridExec(){
 
-      scene.remove(box.cube);
-      cubes.splice(cubes.indexOf(box));
+
+  for(var i = cubes.length;i>0;i--){
+    if (cubes[i-1].deleted == 1){
+      scene.remove(cubes[i-1].cube);
+      cubes.splice(i-1,1);
     }
-  });
-  while(tomake.length>0){
+  }
+  while(tomake.length>1){
     var num = tomake.shift();
     x = (num % 3) -1;
     y = Math.floor(num/9);
     z = Math.floor((num %9)/3) -1;
-    var ccube = new cubetiles(Math.log2(tomake.shift()));
-    ccube.cube.castShadow = true;
+    var ccube = new cubetiles(tomake.shift()-1);
+    ccube.cube.castShadow = false;
     ccube.cube.receiveShadow = true;
     ccube.cube.position.set(x,y,z);
     ccube.cube.position.multiplyScalar(50);
     ccube.cube.position.y +=10;
     scene.add(ccube.cube);
     cubes.push(ccube);
+    console.log(num);
   }
-
+  
   checkEmpty();
   
   if(emptygrid.length>0){
-    // console.log(framecounter);
-    // spawnbox();
+
     //spawning newbox randomly start
-    var num = Math.floor(Math.random()*(emptygrid.length+1)-1);
+    var num = Math.floor(Math.random()*(emptygrid.length));
+    console.log(num);
+    console.log(emptygrid);
     gamegrid[emptygrid[num]] = 1;
-    emptygrid.length = 0;
     var x,y,z;
-    x = (num % 3) -1;
-    y = Math.floor(num/9);
-    z = Math.floor((num %9)/3) -1;
-    // convertedPos.set(x,y,z);
+    x = ((emptygrid[num] % 3) -1)*50;
+    y = (Math.floor(emptygrid[num]/9)*50)+10;
+    z = (Math.floor((emptygrid[num] %9)/3) -1)*50;
     var ccube = new cubetiles(0);
-    ccube.cube.castShadow = true;
+    ccube.cube.castShadow = false;
     ccube.cube.receiveShadow = true;
     ccube.cube.position.set(x,y,z);
-    ccube.cube.position.multiplyScalar(50);
-    ccube.cube.position.y +=10;
     scene.add(ccube.cube);
     cubes.push(ccube);
-    //end spawning newbox
+    emptygrid.length = 0;
   }
 
-  moveone.length = 0;
-  movetwo.length = 0;
+  console.log(movetwo);
+  console.log(moveone);
+  
+  console.log(tomake);
+  gamegrid.fill(0);
+  for(var i = 0 ; i< cubes.length;i++){
+    cubes[i].calcindex();
+    // console.log(cubes[i].gridindex);
+    // console.log(cubes[i].getValue());
+    gamegrid[cubes[i].getGridIndex()]=cubes[i].getValue();
+  }
+  console.log(gamegrid);
+  console.log(cubes.length);
   todelete.length = 0;
 }
 
@@ -584,7 +630,10 @@ const animate = () =>
     //render
     // sphereCamera.update(renderer, scene);
     if(framecounter<10){
-      updatepos();
+      // updatepos();
+      for(var i =0;i<cubes.length;i++){
+        move(cubes[i]);
+      }
       if(framecounter == 9){
         gridExec();
       }
