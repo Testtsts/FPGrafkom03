@@ -122,6 +122,11 @@ function checkEmpty(){
 
 //move vector
 
+var score = 0;
+let getScore = document.getElementById("score");
+// console.log(getScore);
+
+
 
 async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
   if(z!=0){
@@ -131,6 +136,7 @@ async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         todelete.push(yIndex);
         tomake.push(zIndex);
         tomake.push(z+1);
+        score += Math.pow(2,z+1);
         //gamegrid[zIndex]= z+y;
         //gamegrid[yIndex]= 0 ;
         if(x != 0){
@@ -148,6 +154,7 @@ async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         todelete.push(zIndex);
         tomake.push(zIndex);
         tomake.push(z+1);
+        score += Math.pow(2,z+1);
       }
       else if(x != 0){
         moveone.push(xIndex);
@@ -162,6 +169,7 @@ async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         todelete.push(xIndex);
         tomake.push(yIndex);
         tomake.push(x+1);
+        score += Math.pow(x+1);
         //gamegrid[yIndex]= x+y;
         //gamegrid[xIndex]= 0;
       }
@@ -176,6 +184,7 @@ async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         todelete.push(xIndex);
         tomake.push(zIndex);
         tomake.push(x+1);
+        score += Math.pow(x+1);
         //gamegrid[zIndex] = x+y;
         //gamegrid[yIndex]= 0;
         //gamegrid[xIndex]= 0;
@@ -354,6 +363,11 @@ function onDocumentKeyDown(event){
     for(var i=0;i<cubes.length;i++){
       gridmanager(cubes[i]);
     }
+    getScore.textContent= `${score}`;
+    console.log(`getScore: ${getScore.innerHTML}`);
+    moveone.length = 0;
+    movetwo.length = 0;
+    todelete.length = 0;
 
 };
 
@@ -647,8 +661,9 @@ if(!box.canMove()){
     ccube.cube.position.y +=10;
     scene.add(ccube.cube);
     cubes.push(ccube);
-    console.log(num);
+    // console.log(num);
   }
+  tomake.length = 0;
   
   checkEmpty();
   
@@ -656,8 +671,8 @@ if(!box.canMove()){
 
     //spawning newbox randomly start
     var num = Math.floor(Math.random()*(emptygrid.length));
-    console.log(num);
-    console.log(emptygrid);
+    // console.log(num);
+    // console.log(emptygrid);
     gamegrid[emptygrid[num]] = 1;
     var x,y,z;
     x = ((emptygrid[num] % 3) -1)*50;
@@ -672,10 +687,10 @@ if(!box.canMove()){
     emptygrid.length = 0;
   }
 
-  console.log(movetwo);
-  console.log(moveone);
+  // console.log(movetwo);
+  // console.log(moveone);
   
-  console.log(tomake);
+  // console.log(tomake);
   gamegrid.fill(0);
   for(var i = 0 ; i< cubes.length;i++){
     cubes[i].calcindex();
@@ -683,9 +698,10 @@ if(!box.canMove()){
     // console.log(cubes[i].getValue());
     gamegrid[cubes[i].getGridIndex()]=cubes[i].getValue();
   }
-  console.log(gamegrid);
-  console.log(cubes.length);
+  // console.log(gamegrid);
+  // console.log(cubes.length);
   // todelete.length = 0;
+  // console.log(score);
 }
 
 var framecounter = 11;
