@@ -685,7 +685,7 @@ if(!box.canMove()){
   }
   console.log(gamegrid);
   console.log(cubes.length);
-  todelete.length = 0;
+  // todelete.length = 0;
 }
 
 var framecounter = 11;
