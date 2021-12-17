@@ -319,12 +319,15 @@ window.addEventListener('resize', () =>
 
 // KeyboardEvents
 document.addEventListener("keydown", onDocumentKeyDown, false);
-
+var req;
 function onDocumentKeyDown(event){
     let keyCode = event.which;
     if (keyCode == 8){
       cubes.forEach(removecube);
+      setTimeout(100);
       cubes.length = 0;
+      document.querySelector('.modal').style.display = "flex";
+      cancelAnimationFrame(req);
       return;
     }
     if(framecounter <= 10){
@@ -724,6 +727,6 @@ const animate = () =>
     if(framecounter >120000){
       framecounter = 11;
     }
-    window.requestAnimationFrame(animate);
+    req=window.requestAnimationFrame(animate);
 }
 animate();
