@@ -3,6 +3,7 @@ import {OrbitControls} from './js/OrbitControls.js';
 import { loadObjek } from './objek.js';
 import * as dat from './js/libs/dat.gui.module.js';
 import {path, box2048} from './kotak.js';
+import {GLTFLoader} from './js/GLTFLoader.js';
 
 //canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -28,12 +29,12 @@ async function init(){
   // lookBackward()
   // await delay(500)
   // text.innerText = "Gooo!!!"
-  const {tree1, tree2, tree3, castle, slide, rock, 
-    bush1, bush2, bush3, bush4, bush5, tree4,tree5,
-          } = await loadObjek();
-  scene.add(tree1, tree2, tree3, castle, slide, rock,
-    bush1, bush2, bush3, bush4, bush5, tree4,tree5,
-    );
+  // const {tree1, tree2, tree3, castle, slide, rock, 
+  //   bush1, bush2, bush3, bush4, bush5, tree4,tree5,
+  //         } = await loadObjek();
+  // scene.add(tree1, tree2, tree3, castle, slide, rock,
+  //   bush1, bush2, bush3, bush4, bush5, tree4,tree5,
+  //   );
   bgMusic.play()
   start();
 }
@@ -354,22 +355,6 @@ function onDocumentKeyDown(event){
       gridmanager(cubes[i]);
     }
 
-
-  
-    // var ccube = new THREE.Mesh(geometry,material);
-    // var ccube = new cubetiles(geometry,material,0);
-    // ccube.cube.castShadow = true;
-    // ccube.cube.receiveShadow = true;
-
-    // ccube.cube.position.set(getrand(),getrand()+50,getrand());
-    
-    
-    // cubes.add(ccube);
-    // scene.add(ccube.cube);
-    // cubes.push(ccube);
-    // console.log(cubes.length);
-    // moveone.length = 0;
-    // movetwo.length = 0;
 };
 
 // Camera
@@ -384,8 +369,8 @@ const controls = new OrbitControls(camera, canvas);
 camera.position.set( 0, 50, 200 );
 // controls.target.set(10, 10, 10);
 controls.smoothZoom = true;
-controls.minDistance = 50;
-controls.maxDistance = 500;
+// controls.minDistance = 50;
+controls.maxDistance = 300;
 controls.enablePan = true;
 controls.maxPolarAngle = Math.PI / 2;
 controls.update();
@@ -429,7 +414,7 @@ scene.add(mesh)
 
 let tex = new THREE.TextureLoader().load("./assets/grass.jpg")
 tex.anisotropy = 100
-tex.repeat.set(50, 50)
+tex.repeat.set(5, 5)
 tex.wrapT = THREE.RepeatWrapping
 tex.wrapS = THREE.RepeatWrapping
 geo = new THREE.PlaneBufferGeometry(1500, 1500);
@@ -446,6 +431,86 @@ let axis = new THREE.Vector3(0, 1, 0)
 //   camera.position.applyAxisAngle(axis, 0.01)
 // }
 
+//model
+// init loader
+const gloader = new GLTFLoader()
+
+// make async loader
+const loadAsync = url => {
+  return new Promise(resolve => {
+    gloader.load(url, gltf => {
+      resolve(gltf)
+    })
+  })
+}
+
+// load both models in parallel
+Promise.all([loadAsync('./assets/playground/GLTF/tree1.glb'), 
+            loadAsync('./assets/playground/GLTF/tree2.glb'),
+            loadAsync('assets/castle/scene.gltf'),
+            loadAsync('assets/playground/GLTF/slide.glb'),
+            loadAsync('assets/Rock/scene.gltf'),
+            loadAsync('./assets/forest_asset/scene.gltf'),
+            loadAsync('./assets/forest_asset/scene.gltf'),
+            loadAsync('./assets/forest_asset/scene.gltf'),
+            loadAsync('./assets/forest_asset/scene.gltf'),
+            loadAsync('./assets/forest_asset/scene.gltf'),
+          ]).then(models => {
+  // get what you need from the models array
+  const tree1 = models[0].scene.children[0]
+  const tree2 = models[1].scene.children[0]
+  const castle = models[2].scene.children[0]
+  const slide = models[3].scene.children[0]
+  const rock = models[4].scene.children[0]
+  const forest1 = models[5].scene.children[0]
+  const forest2 = models[6].scene.children[0]
+  const forest3 = models[7].scene.children[0]
+  const forest4 = models[8].scene.children[0]
+  const forest5 = models[9].scene.children[0]
+  
+  tree1.scale.set(10,10,10);
+  tree1.position.set(-200, -5, -180);
+
+  tree2.scale.set(10,10,10);
+  tree2.position.set(100, -5, 100);
+
+  castle.scale.set(50,50,50);
+  castle.position.set(-50, -50, -500);
+
+  slide.scale.set(10,10,10);
+  slide.position.set(-200, -5, 150);
+
+  rock.scale.set(10,10,10);
+  rock.position.set(-150, -2, 150);
+
+  forest1.scale.set(15,15,15);
+  forest1.position.set(230,-5,-350);
+
+  forest2.scale.set(15,15,15);
+  forest2.position.set(-300,-5,-100);
+
+  forest3.scale.set(15,15,15);
+  forest3.position.set(-300,-5,100);
+
+  forest4.scale.set(15,15,15);
+  forest4.position.set(300,-5,-200);
+
+  forest5.scale.set(15,15,15);
+  forest5.position.set(250,-5,-50);
+
+
+  // add both models to the scene
+  scene.add(tree1)
+  scene.add(tree2)
+  scene.add(castle)
+  scene.add(slide)
+  scene.add(rock)
+  scene.add(forest1)
+  scene.add(forest2)
+  scene.add(forest3)
+  scene.add(forest4)
+  scene.add(forest5)
+})
 
 const geometry = new THREE.BoxGeometry(20,20,20);
 let n = 1024;
