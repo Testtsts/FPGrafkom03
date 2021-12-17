@@ -10,12 +10,13 @@ const canvas = document.querySelector('canvas.webgl')
 const gameStat = "loading"
 const startBtn = document.querySelector('.start-btn')
 const bgMusic = new Audio('./music/bg.mp3')
+document.getElementById('finish').style.display = "none"
 bgMusic.loop = true
 startBtn.innerText = "start"
 startBtn.addEventListener('click', () => {
   if(startBtn.innerText == "START"){
       init()
-      document.querySelector('.modal').style.display = "none"
+      document.getElementById('start').style.display = "none"
   }
 })
 
@@ -96,6 +97,7 @@ const moveone = [];
 const todelete = [];
 const tomake = [];
 const cubes = [];
+var gameFinish = 0;
 
 function checkEmpty(){
   for(var i = 0; i<gamegrid.length; i++){
@@ -126,7 +128,9 @@ var score = 0;
 let getScore = document.getElementById("score");
 // console.log(getScore);
 
-
+function endGame(){
+  gameFinish = 1;
+}
 
 async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
   if(z!=0){
@@ -137,6 +141,9 @@ async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         tomake.push(zIndex);
         tomake.push(z+1);
         score += Math.pow(2,z+1);
+        if(Math.pow(2,z+1)==2048){
+          endGame();
+        }
         //gamegrid[zIndex]= z+y;
         //gamegrid[yIndex]= 0 ;
         if(x != 0){
@@ -155,6 +162,9 @@ async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         tomake.push(zIndex);
         tomake.push(z+1);
         score += Math.pow(2,z+1);
+        if(Math.pow(2,z+1)==2048){
+          endGame();
+        }
       }
       else if(x != 0){
         moveone.push(xIndex);
@@ -170,6 +180,9 @@ async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         tomake.push(yIndex);
         tomake.push(x+1);
         score += Math.pow(2,x+1);
+        if(Math.pow(2,y+1)==2048){
+          endGame();
+        }
         //gamegrid[yIndex]= x+y;
         //gamegrid[xIndex]= 0;
       }
@@ -185,6 +198,9 @@ async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         tomake.push(zIndex);
         tomake.push(x+1);
         score += Math.pow(2,x+1);
+        if(Math.pow(2,y+1)==2048){
+          endGame();
+        }
         //gamegrid[zIndex] = x+y;
         //gamegrid[yIndex]= 0;
         //gamegrid[xIndex]= 0;
@@ -326,11 +342,12 @@ function onDocumentKeyDown(event){
       cubes.forEach(removecube);
       setTimeout(100);
       cubes.length = 0;
-      document.querySelector('.modal').style.display = "flex";
-      cancelAnimationFrame(req);
       return;
     }
     if(framecounter <= 10){
+      return;
+    }
+    if(gameFinish == 1){
       return;
     }
     if (keyCode == 87){
@@ -720,8 +737,16 @@ const animate = () =>
       }
       if(framecounter == 9){
         gridExec();
+        setTimeout(10);
+        if(gameFinish == 1){
+          document.getElementById('finish').style.display = "flex";
+          cancelAnimationFrame(req);
+
+        }
       }
+      
     }
+    
     renderer.render(scene, camera);
     framecounter +=1;
     if(framecounter >120000){
