@@ -118,9 +118,9 @@ function checkEmpty(){
 //   y = Math.floor(num/9);
 //   z = Math.floor((num %9)/3) -1;
 //   convertedPos.set(x,y,z);
-// }
 
 //move vector
+// }
 
 var score = 0;
 let getScore = document.getElementById("score");
@@ -169,7 +169,7 @@ async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         todelete.push(xIndex);
         tomake.push(yIndex);
         tomake.push(x+1);
-        score += Math.pow(x+1);
+        score += Math.pow(2,x+1);
         //gamegrid[yIndex]= x+y;
         //gamegrid[xIndex]= 0;
       }
@@ -184,7 +184,7 @@ async function xtoZ(xIndex,x,yIndex,y,zIndex,z){
         todelete.push(xIndex);
         tomake.push(zIndex);
         tomake.push(x+1);
-        score += Math.pow(x+1);
+        score += Math.pow(2,x+1);
         //gamegrid[zIndex] = x+y;
         //gamegrid[yIndex]= 0;
         //gamegrid[xIndex]= 0;
