@@ -341,7 +341,13 @@ function onDocumentKeyDown(event){
     if (keyCode == 8){
       cubes.forEach(removecube);
       setTimeout(100);
+      gameFinish = 0;
       cubes.length = 0;
+      gamegrid.fill(0,27);
+      score = 0;
+      getScore.textContent= `${score}`;
+      document.getElementById('finish').style.display = "none";
+      document.getElementById('start').style.display = "flex"
       return;
     }
     if(framecounter <= 10){
